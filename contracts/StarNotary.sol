@@ -5,11 +5,6 @@ import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/ERC721.sol"
 
 // StarNotary Contract declaration inheritance the ERC721 openzeppelin implementation
 contract StarNotary is ERC721 {
-
-    constructor() ERC721("Star", "STAR") public {
-
-    }
-
     // Star data
     struct Star {
         string name;
@@ -18,17 +13,20 @@ contract StarNotary is ERC721 {
     // Implement Task 1 Add a name and symbol properties
     // name: Is a short name to your token
     // symbol: Is a short string like 'USD' -> 'American Dollar'
-    
+
+    string _name = "Star";
+    string _symbol = "ST4R";
 
     // mapping the Star with the Owner Address
     mapping(uint256 => Star) public tokenIdToStarInfo;
     // mapping the TokenId and price
     mapping(uint256 => uint256) public starsForSale;
 
-    
+    constructor() ERC721(_name, _symbol) public { }
+
     // Create Star using the Struct
-    function createStar(string memory _name, uint256 _tokenId) public { // Passing the name and tokenId as a parameters
-        Star memory newStar = Star(_name); // Star is an struct so we are creating a new Star
+    function createStar(string memory _starName, uint256 _tokenId) public { // Passing the name and tokenId as a parameters
+        Star memory newStar = Star(_starName); // Star is an struct so we are creating a new Star
         tokenIdToStarInfo[_tokenId] = newStar; // Creating in memory the Star -> tokenId mapping
         _mint(msg.sender, _tokenId); // _mint assign the the star with _tokenId to the sender address (ownership)
     }
@@ -59,22 +57,33 @@ contract StarNotary is ERC721 {
     }
 
     // Implement Task 1 lookUptokenIdToStarInfo
+    // 1. You should return the Star saved in tokenIdToStarInfo mapping
     function lookUptokenIdToStarInfo (uint _tokenId) public view returns (string memory) {
-        //1. You should return the Star saved in tokenIdToStarInfo mapping
+        return tokenIdToStarInfo[_tokenId].name;
     }
 
     // Implement Task 1 Exchange Stars function
+    // 1. Passing to star tokenId you will need to check if the owner of _tokenId1 or _tokenId2 is the sender
+    // 2. You don't have to check for the price of the token (star)
+    // 3. Get the owner of the two tokens (ownerOf(_tokenId1), ownerOf(_tokenId1)
+    // 4. Use _transferFrom function to exchange the tokens.
     function exchangeStars(uint256 _tokenId1, uint256 _tokenId2) public {
-        //1. Passing to star tokenId you will need to check if the owner of _tokenId1 or _tokenId2 is the sender
-        //2. You don't have to check for the price of the token (star)
-        //3. Get the owner of the two tokens (ownerOf(_tokenId1), ownerOf(_tokenId1)
-        //4. Use _transferFrom function to exchange the tokens.
+        address sender1 = ownerOf(_tokenId1);
+        address sender2 = ownerOf(_tokenId2);
+        require(msg.sender == sender1 || msg.sender == sender2, "You do not own any of this stars");
+        require(sender1 != sender2, "Both stars are owned by the same address");
+        _transfer(sender1, sender2, _tokenId1);
+        _transfer(sender2, sender1, _tokenId2);
     }
 
     // Implement Task 1 Transfer Stars
+    // 1. Check if the sender is the ownerOf(_tokenId)
+    // 2. Use the transferFrom(from, to, tokenId); function to transfer the Star
     function transferStar(address _to1, uint256 _tokenId) public {
-        //1. Check if the sender is the ownerOf(_tokenId)
-        //2. Use the transferFrom(from, to, tokenId); function to transfer the Star
+        address owner = ownerOf(_tokenId);
+        require(msg.sender == owner, "You do not own this star");
+        require(_to1 != owner, "From and destination addresses must be different");
+        _transfer(owner, _to1, _tokenId);
     }
 
 }
