@@ -1,35 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" class="h-full">
   <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StarNotary DAPP</title>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+      button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    </style>
   </head>
-  <style>
-    input {
-      display: block;
-      margin-bottom: 12px;
-    }
-  </style>
-  <body>
-    <h1>StarNotary Token DAPP</h1>
+  <body class="h-full bg-gradient-to-b from-black to-gray-900 text-gray-100 bg-fixed">
+    <div id="particles-js" class="h-64"></div>
+    <section class="pb-16">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold lg:text-5xl">
+          <svg class="text-yellow-500 w-10 h-10 inline-block mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+          StarNotary Token DAPP
+        </h1>
+        <p class="text-lg text-gray-200 mt-4">Mainstreaming to own a star</p>
+        <h2 class="text-2xl font-bold mt-8 lg:text-4xl">Create a Star</h2>
+        <form action="#" method="POST" onsubmit="event.preventDefault(); App.createStar()" class="p-8 bg-white bg-opacity-10 rounded-xl mt-4">
+          <label for="starName" class="block font-medium uppercase text-sm text-gray-400">
+            Star Name:
+          </label>
+          <input type="text" id="starName" required class="block w-full bg-gray-700 appearance-none px-4 py-2 rounded-lg text-gray-300" />
+          <label for="starId" class="block font-medium uppercase text-sm text-gray-400 mt-4">
+            Star ID (numeric):
+          </label>
+          <input type="text" id="starId" required pattern="([\d]+)" class="block w-full bg-gray-700 appearance-none px-4 py-2 rounded-lg text-gray-300" />
+          <button type="submit" id="createStar" class="btn block w-full bg-yellow-600 text-white mt-4 p-4 rounded-lg">Create Star</button>
+        </form>
 
-    <hr>
+        <h2 class="text-2xl font-bold mt-8 lg:text-4xl">Look up a star</h2>
+        <form action="#" method="POST" onsubmit="event.preventDefault(); App.lookUp()" class="p-8 bg-white bg-opacity-10 rounded-xl mt-4">
+          <label for="lookid" class="block font-medium uppercase text-sm text-gray-400">
+            Star ID:
+          </label>
+          <input type="text" id="lookid" required pattern="([\d]+)" class="block w-full bg-gray-700 appearance-none px-4 py-2 rounded-lg text-gray-300" />
+          <button type="submit" id="lookUpStar" class="btn block w-full bg-yellow-600 text-white mt-4 p-4 rounded-lg">Look Up a Star</button>
+        </form>
 
-    <br>
-      <h1>Create a Star</h1>
-      <br><label for="starName">Star Name:</label><input type="text" id="starName"></input>
-      <br><label for="starId">Star ID:</label><input type="text" id="starId"></input>
-      <br><br><button id="createStar" onclick="App.createStar()">Create Star</button>
-      <br>
-      <hr>
-      <br>
-      <h1>Look up a Star</h1>
-      <br><label for="name">Star ID:</label><input type="text" id="lookid"></input>
-      <br><br><button onclick="App.lookUp()">Look Up a Star</button>
-      <hr>
-      <br>
-      <span id="status"></span>
-      <br>
+        <div class="rounded-xl mt-8 block p-8 bg-white bg-opacity-10 border-2 border-dashed border-gray-700 text-gray-300 text-center text-lg">
+          <span id="status">Your result will be displayed here</span>
+        </div>
+      </div>
+    </section>
     <script src="index.js"></script>
   </body>
 </html>
